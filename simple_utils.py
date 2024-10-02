@@ -321,7 +321,7 @@ def get_config(args, device, transform=None):
             sampler = create_sampler(model=model, **diffusion_config)
             dtype = torch.float
         elif args.dataset == 'ct':
-            model_id = '/home/henry/projects/inverse/ddpm-ct-256/'
+            model_id = '/home/projects/inverse/ddpm-ct-256/'
             dtype = torch.float
             pipeline = DiffusionPipeline.from_pretrained(model_id, torch_dtype=dtype).to(device)
             sampler = pipeline
