@@ -1,0 +1,5 @@
+lpips
+omegaconf
+torchmetrics
+pytorch_lightning
+taming-transformers

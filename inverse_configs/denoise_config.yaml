@@ -1,0 +1,16 @@
+conditioning:
+  method: ps
+  params:
+    scale: 0.5
+
+data:
+  name: ffhq
+  root: ./data/samples/
+
+measurement:
+  operator:
+    name: noise
+
+  noise:
+    name: gaussian
+    sigma: 0.05
