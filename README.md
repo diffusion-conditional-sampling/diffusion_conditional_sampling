@@ -1,4 +1,4 @@
-# fpips
+# Diffusion Conditional Sampling (DCS)
 
 Step 1:
 Install requirements.
