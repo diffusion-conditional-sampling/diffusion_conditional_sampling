@@ -15,6 +15,7 @@ from optimizers.dps import DPS
 from optimizers.lgdmc import LGDMC
 from optimizers.lgdmcjf import LGDMCJF
 from optimizers.dpsjf import DPSJF
+from optimizers.apmcpnp import APMCPNP
 from optimizers.ddnm import DDNM
 from optimizers.rdps import RDPS
 from optimizers.rdps_eps import RDPSEps
@@ -160,6 +161,9 @@ def get_config(args, device, transform=None):
         alg_cls = DPSJF
         if args.latent:
             diffusion_cls = partial(diffusion_cls, loss_type='pixel')
+    elif args.algorithm == 'apmcpnp':
+        alg_kwargs = {}
+        alg_cls = APMCPNP
     elif args.algorithm == 'psld':
         assert args.latent
         alg_kwargs = {}
