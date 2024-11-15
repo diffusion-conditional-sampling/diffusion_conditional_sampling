@@ -28,7 +28,7 @@ class APMCPNP:
             score = self.env.eps_to_score(t, eps)
             
             xt.data += -gamma*(xt.grad - self.env.alpha(t)*score) #move accoring to gradient
-            xt.data += np.sqrt(2)*gamma*self.env.sigma(t)*torch.randn_like(xt.data) #noising
+            xt.data += np.sqrt(2*gamma)*self.env.sigma(t)*torch.randn_like(xt.data) #noising
 
         
         return xt.detach()
