@@ -22,6 +22,7 @@ parser.add_argument('--dataset', help='Dataset: ffhq / imagenet', default='ffhq'
 parser.add_argument('--seed', help='Seed', type=int, default=-1)
 parser.add_argument('--scale', help='Guidance scale on algorithm (for ours, it is the learning rate)', type=float, default=1.)
 parser.add_argument('--sigma', help='Measurement noise (e.g., variance of eta)', type=float, default=0.01)
+parser.add_argument('--nmc', help='LGDMC number of monte-carlo iterations', type=int, default=10)
 parser.add_argument('--data_root', help='Data location', default='/data/inverse/', type=str)
 parser.add_argument('--model_root', help='Model location', default='/data/inverse/models', type=str)
 parser.add_argument('--latent', help='Latent models', action='store_true')
@@ -55,8 +56,7 @@ save_idx = 0
 x_metrics = []
 y_metrics = []
 for i, ref_img in enumerate(config.loader):
-    if i < 3:
-        continue
+
     ref_img = ref_img.to(device)
 
     if 'inpainting' in args.task:

@@ -12,6 +12,9 @@ from torchmetrics.image import StructuralSimilarityIndexMeasure
 from functools import partial
 
 from optimizers.dps import DPS
+from optimizers.lgdmc import LGDMC
+from optimizers.lgdmcjf import LGDMCJF
+from optimizers.dpsjf import DPSJF
 from optimizers.ddnm import DDNM
 from optimizers.rdps import RDPS
 from optimizers.rdps_eps import RDPSEps
@@ -137,6 +140,24 @@ def get_config(args, device, transform=None):
             'latent': args.latent,
         }
         alg_cls = DPS
+        if args.latent:
+            diffusion_cls = partial(diffusion_cls, loss_type='pixel')
+    
+    elif args.algorithm == 'lgdmc':
+        alg_kwargs = {
+            # 'gamma': 0.1 if args.latent else 1.0,
+            'gamma': args.scale,
+            'latent': args.latent,
+            'n':args.nmc
+        }
+        alg_cls = LGDMC
+        
+    elif args.algorithm == 'dpsjf':
+        alg_kwargs = {
+            'gamma': args.scale,
+            'latent': args.latent,
+        }
+        alg_cls = DPSJF
         if args.latent:
             diffusion_cls = partial(diffusion_cls, loss_type='pixel')
     elif args.algorithm == 'psld':

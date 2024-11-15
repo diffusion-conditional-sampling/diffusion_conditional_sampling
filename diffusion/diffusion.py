@@ -449,3 +449,15 @@ class DPSDiffusion(DDPMDiffusion):
     def eps(self, t, xt):
         x0 = self.denoise(t, xt)
         return self.x0_to_eps(t, x0, xt)
+
+    def logsump_y_x(self, x_all):
+        n=x_all.shape[1]
+        x_all = x_all.reshape(-1, n, *self.shape)
+        res = 0.
+        for i in range(n):
+            res += self.measurement - self.operator.forward(x_all[:,i], mask=self.mask)
+        res /= float(n)
+        logp = -0.5 * (res ** 2).sum()
+        return logp
+
+    

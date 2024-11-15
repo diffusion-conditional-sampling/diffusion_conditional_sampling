@@ -47,13 +47,13 @@ class FFHQDataset(VisionDataset):
             self.fpaths = []
             for fpath in fpaths:
                 fnum = int(fpath.split('/')[-1].split('.')[0])
-                self.fpaths.append(fpath)
-                # FSTART = 69000
-                # if fnum >= FSTART and fnum < FSTART + 1000:
-                #     self.fpaths.append(fpath)
+                #self.fpaths.append(fpath)
+                FSTART = 69000
+                if fnum >= FSTART and fnum < FSTART + 1000:
+                    self.fpaths.append(fpath)
         else:
             self.fpaths = fpaths
-            
+
         assert len(self.fpaths) > 0, "File list is empty. Check the root."
 
     def __len__(self):
