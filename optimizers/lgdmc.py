@@ -1,6 +1,7 @@
 import torch
 import numpy as np
 from tqdm import tqdm
+import os
 
 class LGDMC:
     """
@@ -16,7 +17,7 @@ class LGDMC:
     def solve(self, xT):
         
         xt = xT.requires_grad_(True)
-        pbar = tqdm(self.env.timesteps[:-1], total=self.env.num_steps - 1)
+        pbar = tqdm(self.env.timesteps[:-1], total=self.env.num_steps - 1, disable=os.environ.get("DISABLE_TQDM", False))
         for t in pbar:
             
             rt = self.env.sigma(t)/np.sqrt(1 + self.env.sigma(t)**2)

@@ -3,3 +3,7 @@ omegaconf
 torchmetrics
 pytorch_lightning
 taming-transformers
+matplotlib
+transformers
+diffusers
+einops

@@ -152,6 +152,15 @@ def get_config(args, device, transform=None):
             'n':args.nmc
         }
         alg_cls = LGDMC
+
+    elif args.algorithm == 'lgdmcjf':
+        alg_kwargs = {
+            # 'gamma': 0.1 if args.latent else 1.0,
+            'gamma': args.scale,
+            'latent': args.latent,
+            'n':args.nmc
+        }
+        alg_cls = LGDMCJF
         
     elif args.algorithm == 'dpsjf':
         alg_kwargs = {

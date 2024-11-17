@@ -1,6 +1,7 @@
 import torch
 import numpy as np
 from tqdm import tqdm
+import os
 
 class DPSJF:
     """
@@ -14,7 +15,7 @@ class DPSJF:
     @torch.no_grad()
     def solve(self, xT):
         xt = xT.requires_grad_(True)
-        pbar = tqdm(self.env.timesteps[:-1], total=self.env.num_steps - 1)
+        pbar = tqdm(self.env.timesteps[:-1], total=self.env.num_steps - 1, disable=os.environ.get("DISABLE_TQDM", False))
         for t in pbar:
             eps = self.env.eps(t, xt)
             xt.data = self.env.step(t, xt, eps)
