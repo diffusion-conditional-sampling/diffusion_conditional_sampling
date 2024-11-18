@@ -50,7 +50,7 @@ class FFHQDataset(VisionDataset):
                 #self.fpaths.append(fpath)
                 FSTART = 69000
                 if fnum >= FSTART and fnum < FSTART + 1000:
-                    self.fpaths.append(fpath)
+                   self.fpaths.append(fpath)
         else:
             self.fpaths = fpaths
 
