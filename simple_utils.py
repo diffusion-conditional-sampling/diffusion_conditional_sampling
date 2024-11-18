@@ -17,7 +17,7 @@ from optimizers.lgdmcjf import LGDMCJF
 from optimizers.dpsjf import DPSJF
 from optimizers.apmcpnp import APMCPNP
 from optimizers.ddnm import DDNM
-from optimizers.rdps import RDPS
+from optimizers.dcs import DCS
 from optimizers.rdps_eps import RDPSEps
 from optimizers.mcg import MCG
 from optimizers.ddrm import DDRM
@@ -194,13 +194,13 @@ def get_config(args, device, transform=None):
     elif args.algorithm == 'ddnm':
         alg_kwargs = {}
         alg_cls = DDNM
-    elif args.algorithm == 'rdps':
+    elif args.algorithm == 'dcs':
         alg_kwargs = {
             'iters': args.iters,
             'lr': args.scale,
             'sigma': args.sigma
         }
-        alg_cls = RDPS
+        alg_cls = DCS
         if args.latent:
             diffusion_cls = partial(diffusion_cls, loss_type='pixel')
     elif args.algorithm == 'rdps_eps':

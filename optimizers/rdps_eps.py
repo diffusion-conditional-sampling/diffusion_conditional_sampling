@@ -1,9 +1,9 @@
 import torch
 import numpy as np
 from tqdm import tqdm
-from optimizers.rdps import *
+from optimizers.dcs import *
 
-class RDPSEps(RDPS):
+class RDPSEps(DCS):
     
     def compute_eps(self, t, xt, iters, verbose=False):
         """
