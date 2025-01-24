@@ -24,6 +24,7 @@ from optimizers.ddrm import DDRM
 from optimizers.psld import PSLD
 from optimizers.stsl import STSL
 from optimizers.resample import ReSample
+from optimizers.red import RED
 
 from utils.unet import create_model
 from utils.ldm import load_model, DDIMSampler
@@ -201,6 +202,14 @@ def get_config(args, device, transform=None):
             'sigma': args.sigma
         }
         alg_cls = DCS
+        if args.latent:
+            diffusion_cls = partial(diffusion_cls, loss_type='pixel')
+    elif args.algorithm == 'red':
+        alg_kwargs = {
+            'lam': args.scale,
+            'latent': args.latent
+        }
+        alg_cls = RED
         if args.latent:
             diffusion_cls = partial(diffusion_cls, loss_type='pixel')
     elif args.algorithm == 'rdps_eps':
