@@ -199,7 +199,7 @@ def get_config(args, device, transform=None):
         alg_kwargs = {
             'iters': args.iters,
             'lr': args.scale,
-            'sigma': args.sigma
+            'sigma': args.sigma,
             'noise_distribution': args.noise_distribution
         }
         alg_cls = DCS
@@ -373,7 +373,7 @@ def get_config(args, device, transform=None):
     measure_config = task_config['measurement']
     operator = get_operator(device=device, **measure_config['operator'])
     measure_config['noise']['sigma'] = args.sigma
-    measure_config['noise']['distribution'] = args.noise_distribution
+    measure_config['noise']['name'] = args.noise_distribution
     noiser = get_noise(**measure_config['noise'])
 
     if measure_config['operator']['name'] == 'inpainting':

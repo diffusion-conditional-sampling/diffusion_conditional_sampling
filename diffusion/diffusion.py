@@ -42,6 +42,7 @@ class Diffusion:
         num_steps=100,
         device='cpu',
         eps=1e-3,
+        noise_distribution='gaussian'
     ):
         self.shape = shape
         self.ndims = np.prod(shape) # eg. a shape of (1, 28, 28) would give 1*28*28=784

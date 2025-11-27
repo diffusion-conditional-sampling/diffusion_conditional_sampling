@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(description='Compute DDP on MNIST.')
 parser.add_argument('-i','--iters', help='Number of optimizer iterations', default=1000, type=int)
 parser.add_argument('-s','--diffusion_steps', help='Number of diffusion iterations', default=100, type=int)
 parser.add_argument('-b','--batch_size', help='Model batch size', default=1, type=int)
-parser.add_argument('-a','--algorithm', help='Algorithm to use: bayes', default='rdps', type=str)
+parser.add_argument('-a','--algorithm', help='Algorithm to use: bayes', default='dcs', type=str)
 parser.add_argument('-t','--task', help='Task to benchmark: box_inpainting / random_inpainting / motion_deblur / gaussian_deblur / super_resolution / phase_retrieval', default='super_resolution', type=str)
 parser.add_argument('--outdir', help='Output directory', default='./out', type=str)
 parser.add_argument('--dataset', help='Dataset: ffhq / imagenet', default='ffhq', type=str)
@@ -28,6 +28,7 @@ parser.add_argument('--model_root', help='Model location', default='/data/invers
 parser.add_argument('--latent', help='Latent models', action='store_true')
 parser.add_argument('--device', help='Device cpu/cuda/cuda:x', default='cuda', type=str)
 parser.add_argument('--hush', help='Print less metrics?', action='store_true')
+parser.add_argument('--noise_distribution', help='Measurement noise (e.g., variance of eta)', type=str, default='gaussian')
 
 args = parser.parse_args()
 

@@ -7,14 +7,15 @@ from diffusion.diffusion import sqrt, clip
 from utils.measurements import InpaintingOperator
 
 class EarlyStop:
-    def __init__(self, env, sigma=0.1, max_cdf=None):
+    def __init__(self, env, sigma=0.1, max_cdf=None, noise_distribution='gaussian'):
         self.env = env
         self.sigma = sigma
         self.max_cdf = max_cdf if max_cdf is not None else 1.
+        self.noise_distribution = noise_distribution
 
         if noise_distribution == 'laplace':
             self.noise_distribution = torch.distributions.laplace.Laplace(loc=0., scale=1.)
-        elif noise_distribution == 'normal':
+        elif noise_distribution == 'gaussian':
             self.noise_distribution = torch.distributions.normal.Normal(loc=0., scale=1.)
         else:
             raise ValueError(f"Unknown noise distribution: {noise_distribution}")
@@ -37,7 +38,7 @@ class EarlyStop:
         return cdf, thresh
 
 class DCS:
-    def __init__(self, env, iters=1, sigma=None, lr=5., const=1., patience=0):
+    def __init__(self, env, iters=1, sigma=None, lr=5., const=1., patience=0, noise_distribution='gaussian'):
         self.env = env
         self.iters = iters
         self.lr = lr
@@ -46,6 +47,7 @@ class DCS:
         self.max_cdf = None
         self.const = const
         self.patience = patience
+        self.noise_distribution = noise_distribution
 
     def eta(self, t):
         return (1 - self.env.alpha(t - self.env.dt) - 1e-7) / (self.env.dsigma(t) + 1e-7)
@@ -61,7 +63,7 @@ class DCS:
         return update
         
     def prepare_variables(self, t, xt, eps):
-        self.early_stop = EarlyStop(env=self.env, sigma=self.sigma, max_cdf=self.max_cdf)
+        self.early_stop = EarlyStop(env=self.env, sigma=self.sigma, max_cdf=self.max_cdf, noise_distribution=self.noise_distribution)
         if not hasattr(self, 'last_pred'):
             self.cond_eps = torch.zeros_like(xt, requires_grad=True)
             self.optim = torch.optim.AdamW(
