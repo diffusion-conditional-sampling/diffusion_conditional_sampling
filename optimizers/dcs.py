@@ -12,6 +12,13 @@ class EarlyStop:
         self.sigma = sigma
         self.max_cdf = max_cdf if max_cdf is not None else 1.
 
+        if noise_distribution == 'laplace':
+            self.noise_distribution = torch.distributions.laplace.Laplace(loc=0., scale=1.)
+        elif noise_distribution == 'normal':
+            self.noise_distribution = torch.distributions.normal.Normal(loc=0., scale=1.)
+        else:
+            raise ValueError(f"Unknown noise distribution: {noise_distribution}")
+
     def get_residual(self, x):
         N, _ = x.shape
         x = x.reshape(N, *self.env.shape)
@@ -25,8 +32,7 @@ class EarlyStop:
         res = self.get_residual(x)
         s = self.sigma
         z = res.abs() / s
-        dist = Normal(loc=0., scale=1.)
-        cdf = 2 * dist.cdf(-z).mean(dim=-1)
+        cdf = 2 * self.noise_distribution.cdf(-z).mean(dim=-1)
         thresh = np.sqrt(1 - self.env.alpha(t)) * self.max_cdf
         return cdf, thresh
 

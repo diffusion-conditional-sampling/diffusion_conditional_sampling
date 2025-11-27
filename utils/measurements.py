@@ -252,6 +252,14 @@ class GaussianNoise(Noise):
     def forward(self, data):
         return data + torch.randn_like(data, device=data.device) * self.sigma
 
+@register_noise(name='laplace')
+class LaplaceNoise(Noise):
+    def __init__(self, sigma):
+        self.sigma = sigma
+
+    def forward(self, data):
+        eps = torch.distributions.Laplace(0, self.sigma).sample(data.shape).to(data.device)
+        return data + eps
 
 @register_noise(name='poisson')
 class PoissonNoise(Noise):

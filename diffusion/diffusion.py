@@ -3,6 +3,12 @@ import torch
 from utils.sde_lib import VPSDE
 from diffusion.latent_pipeline import retrieve_timesteps
 
+def gaussian_logp(x, mean, std = 1):
+    return -0.5 * ((x - mean) ** 2 / (std ** 2)).sum()
+
+def laplace_logp(x, mean, scale = 1):
+    return -(torch.abs(x - mean) / scale).sum()
+
 def sqrt(x):
     if isinstance(x, float) or isinstance(x, np.float32):
         return np.sqrt(x)
@@ -49,6 +55,10 @@ class Diffusion:
         self.dt = (1 - eps) / self.num_steps
         self.dtype = dtype
         
+        if noise_distribution == 'gaussian':
+            self.noise_logp = gaussian_logp
+        elif noise_distribution == 'laplace':
+            self.noise_logp = laplace_logp
 
     def sample_xT(self, n, seed=None):
         if seed is not None:
@@ -61,7 +71,7 @@ class Diffusion:
 
     def logp_y_x(self, x):
         x = x.reshape(-1, *self.shape)
-        logp = -0.5 * ((self.measurement - self.operator.forward(x, mask=self.mask)) ** 2).sum()
+        logp = self.noise_logp(self.measurement, self.operator.forward(x, mask=self.mask))
         return logp
 
     def sigma(self, t):
@@ -231,13 +241,13 @@ class SimpleLatentDiffusion(DDPMDiffusion):
     def logp_y_x(self, x, differentiable=False):
         logp = 0.
         if self.loss_type == 'latent' or self.loss_type == 'both':
-            logp += -0.5 * ((self.z_measurement - x.reshape(-1, *self.shape)) ** 2).sum()
+            logp += self.noise_logp(self.z_measurement, x.reshape(-1, *self.shape))
 
         if self.loss_type == 'pixel' or self.loss_type == 'both':
             x = self.decode(x, differentiable=differentiable)
             x = x.reshape(-1, *self.x_shape)
             x = self.operator.forward(x, mask=self.mask)
-            logp += -0.5 * ((self.measurement - x) ** 2).sum()
+            logp += self.noise_logp(self.measurement, x)
 
         return logp
 
@@ -300,13 +310,13 @@ class LatentDiffusion(SimpleLatentDiffusion):
     def logp_y_x(self, x, differentiable=False):
         logp = 0.
         if self.loss_type == 'latent' or self.loss_type == 'both':
-            logp += -0.5 * ((self.z_measurement - x.reshape(-1, *self.shape)) ** 2).sum()
+            logp += self.noise_logp(self.z_measurement, x.reshape(-1, *self.shape))
 
         if self.loss_type == 'pixel' or self.loss_type == 'both':
             x = self.decode(x, differentiable=differentiable)
             x = x.reshape(-1, *self.x_shape)
             x = self.operator.forward(x, mask=self.mask)
-            logp += -0.5 * ((self.measurement - x) ** 2).sum()
+            logp += self.noise_logp(self.measurement, x)
 
         return logp
     
@@ -394,13 +404,13 @@ class StableDiffusion(SimpleLatentDiffusion):
     def logp_y_x(self, x, differentiable=False):
         logp = 0.
         if self.loss_type == 'latent' or self.loss_type == 'both':
-            logp = logp + -0.5 * ((self.z_measurement - x.reshape(-1, *self.shape)) ** 2).sum()
+            logp = logp + self.noise_logp(self.z_measurement, x.reshape(-1, *self.shape))
 
         if self.loss_type == 'pixel' or self.loss_type == 'both':
             x = self.decode(x, differentiable=differentiable)
             x = x.reshape(-1, *self.x_shape)
             x = self.operator.forward(x, mask=self.mask)
-            logp = logp + -0.5 * ((self.measurement - x) ** 2).sum()
+            logp = logp + self.noise_logp(self.measurement, x)
 
         return logp
 
@@ -453,11 +463,14 @@ class DPSDiffusion(DDPMDiffusion):
     def logsump_y_x(self, x_all):
         n=x_all.shape[1]
         x_all = x_all.reshape(-1, n, *self.shape)
-        res = 0.
+        res_x = 0.
+        res_y = 0.
         for i in range(n):
-            res += self.measurement - self.operator.forward(x_all[:,i], mask=self.mask)
-        res /= float(n)
-        logp = -0.5 * (res ** 2).sum()
+            res_x += self.measurement
+            res_y +=self.operator.forward(x_all[:,i], mask=self.mask)
+        res_x /= float(n)
+        res_y /= float(n)
+        logp = self.noise_logp(res_x, res_y)
         return logp
 
     

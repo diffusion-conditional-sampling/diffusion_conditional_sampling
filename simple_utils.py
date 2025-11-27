@@ -200,6 +200,7 @@ def get_config(args, device, transform=None):
             'iters': args.iters,
             'lr': args.scale,
             'sigma': args.sigma
+            'noise_distribution': args.noise_distribution
         }
         alg_cls = DCS
         if args.latent:
@@ -372,6 +373,7 @@ def get_config(args, device, transform=None):
     measure_config = task_config['measurement']
     operator = get_operator(device=device, **measure_config['operator'])
     measure_config['noise']['sigma'] = args.sigma
+    measure_config['noise']['distribution'] = args.noise_distribution
     noiser = get_noise(**measure_config['noise'])
 
     if measure_config['operator']['name'] == 'inpainting':
@@ -387,7 +389,8 @@ def get_config(args, device, transform=None):
         shape=shape,
         num_steps=args.diffusion_steps,
         device=device,
-        dtype=dtype
+        dtype=dtype,
+        noise_distribution=args.noise_distribution
         )
 
     return_dict = AttrDict({
