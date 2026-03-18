@@ -14,13 +14,13 @@
 
 ## Abstract
 
-Diffusion models have been firmly established as principled zero-shot solvers for linear and nonlinear inverse problems, owing to their powerful image prior and iterative sampling algorithm. These approaches often rely on Tweedie's formula, which relates the diffusion variate **x**_t to the posterior mean **E**[**x**_0|**x**_t], in order to guide the diffusion trajectory with an estimate of the final denoised sample **x**_0. However, this does not consider information from the measurement **y**, which must then be integrated downstream. In this work, we propose to estimate the conditional posterior mean **E**[**x**_0|**x**_t, **y**], which can be formulated as the solution to a lightweight, single-parameter maximum likelihood estimation problem. The resulting prediction can be integrated into any standard sampler, resulting in a fast and memory-efficient inverse solver. Our optimizer is amenable to a noise-aware likelihood-based stopping criterion that is robust to measurement noise in **y**. We demonstrate comparable or improved performance against a wide selection of contemporary inverse solvers across multiple datasets and tasks.
+Diffusion models have been firmly established as principled zero-shot solvers for linear and nonlinear inverse problems, owing to their powerful image prior and iterative sampling algorithm. These approaches often rely on Tweedie's formula, which relates the diffusion variate **x**<sub>t</sub> to the posterior mean **E**[**x**<sub>0</sub>|**x**<sub>t</sub>], in order to guide the diffusion trajectory with an estimate of the final denoised sample **x**<sub>0</sub>. However, this does not consider information from the measurement **y**, which must then be integrated downstream. In this work, we propose to estimate the conditional posterior mean **E**[**x**<sub>0</sub>|**x**<sub>t</sub>, **y**], which can be formulated as the solution to a lightweight, single-parameter maximum likelihood estimation problem. The resulting prediction can be integrated into any standard sampler, resulting in a fast and memory-efficient inverse solver. Our optimizer is amenable to a noise-aware likelihood-based stopping criterion that is robust to measurement noise in **y**. We demonstrate comparable or improved performance against a wide selection of contemporary inverse solvers across multiple datasets and tasks.
 
 ---
 
 ## Method Overview
 
-**DCS** corrects the standard (unconditional) Tweedie estimate of **x**_0 by incorporating measurement information **y** at each diffusion step. Rather than using **E**[**x**_0|**x**_t], which averages over all data consistent with **x**_t, we optimize a single scalar correction ε_**y** to approximate **E**[**x**_0|**x**_t, **y**] via maximum likelihood. This corrected score is then fed into any off-the-shelf DDPM sampler.
+**DCS** corrects the standard (unconditional) Tweedie estimate of **x**<sub>0</sub> by incorporating measurement information **y** at each diffusion step. Rather than using **E**[**x**<sub>0</sub>|**x**<sub>t</sub>], which averages over all data consistent with **x**<sub>t</sub>, we optimize a single scalar correction ε_<sub>**y**</sub> to approximate **E**[**x**<sub>0</sub>|**x**<sub>t</sub>, **y**] via maximum likelihood. This corrected score is then fed into any off-the-shelf DDPM sampler.
 
 | | DCS (Ours) | MCG | DPS | DPS-JF | DDNM | RED-Diff | LGD-MC |
 |---|---|---|---|---|---|---|---|
@@ -29,7 +29,7 @@ Diffusion models have been firmly established as principled zero-shot solvers fo
 | **Memory** | **1×** | 3.2× | 3.2× | 1.1× | 1× | 1× | 3.2× |
 
 DCS achieves the fastest runtime and lowest memory footprint while matching or exceeding the reconstruction quality of all compared methods.
-- **Measurement-consistent Tweedies**: Rather than predicting **E**[**x**_0|**x**_t] via the unconditional score, we predict **E**[**x**_0|**x**_t, **y**] by solving a single-parameter MLE problem estimating the forward process score at each diffusion step.
+- **Measurement-consistent Tweedies**: Rather than predicting **E**[**x**<sub>0</sub>|**x**<sub>t</sub>] via the unconditional score, we predict **E**[**x**<sub>0</sub>|**x**<sub>t</sub>, **y**] by solving a single-parameter MLE problem estimating the forward process score at each diffusion step.
 - **Noise-aware maximization (NAM)**: A statistically-grounded early stopping criterion based on a two-sided z-test prevents overfitting to measurement noise across all noise levels.
 - **No score network backpropagation**: DCS never differentiates through the neural score network, cutting runtime by 2–3× compared to posterior-based methods.
 
