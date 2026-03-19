@@ -93,7 +93,7 @@ The first two models should be accessible through this [link](https://drive.goog
 
 Download the following datasets and place them under a shared data root (default: `/data/inverse/`):
 
-| Dataset | Expected path |
+| Dataset | Expected path | Download Link |
 |---|---|---|
 | ImageNet 256×256 | `<data_root>/imagenet256/` | [Download] |
 | FFHQ subset (100 images) | `<data_root>/ffhq_subset/` | [Download](https://www.kaggle.com/datasets/denislukovnikov/ffhq256-images-only) |
