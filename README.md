@@ -87,7 +87,7 @@ Create a `models/` directory and download the following checkpoints:
 | `imagenet256.pt` | ImageNet 256×256 | [Guided Diffusion](https://github.com/openai/guided-diffusion) |
 | `ffhq_ldm.ckpt` | FFHQ LDM | [Latent Diffusion](https://github.com/CompVis/latent-diffusion) |
 
-The first two models should be accessible through this [link]("https://drive.google.com/drive/folders/1jElnRoFv7b31fG0v6pTSQkelbSX3xGZh")
+The first two models should be accessible through this [link](https://drive.google.com/drive/folders/1jElnRoFv7b31fG0v6pTSQkelbSX3xGZh)
 
 ### Datasets
 
