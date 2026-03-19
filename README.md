@@ -7,7 +7,7 @@
 
 \* Equal contribution
 
-[![Paper](https://img.shields.io/badge/paper-AISTATS%202026-blue)](https://proceedings.mlr.press/v300/)
+<!-- [![Paper](https://img.shields.io/badge/paper-AISTATS%202026-blue)](https://proceedings.mlr.press/v300/) -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -208,7 +208,7 @@ dcs/
 
 ---
 
-## Citation
+<!-- ## Citation
 
 If you find this work useful, please cite:
 
@@ -225,4 +225,4 @@ If you find this work useful, please cite:
   year      = {2026},
   publisher = {PMLR}
 }
-```
+``` -->
