@@ -201,9 +201,20 @@ dcs/
 
 ---
 
-<!-- ## Citation
-
 If you find this work useful, please cite:
+
+```bibtex
+@misc{patsenker2025injecting,
+      title={Injecting Measurement Information Yields a Fast and Noise-Robust Diffusion-Based Inverse Problem Solver}, 
+      author={Jonathan Patsenker and Henry Li and Myeongseob Ko and Ruoxi Jia and Yuval Kluger},
+      year={2025},
+      eprint={2508.02964},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
+
+<!-- ## Citation for when publisher actually does its thing
 
 ```bibtex
 @inproceedings{patsenker2026dcs,
