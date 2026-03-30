@@ -9,7 +9,8 @@
 
 <!-- [![Paper](https://img.shields.io/badge/paper-AISTATS%202026-blue)](https://proceedings.mlr.press/v300/) -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Website](https://img.shields.io/website)](https://diffusion-conditional-sampling.github.io)
+([https://img.shields.io/website](https://img.shields.io/website?url=https%3A%2F%2Fdiffusion-conditional-sampling.github.io
+))
 
 ---
 
